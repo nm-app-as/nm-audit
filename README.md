@@ -11,7 +11,7 @@ A 7-phase code audit workflow for Claude Code, packaged as namespaced slash comm
 Open **Claude Code** inside any project and paste this to your agent:
 
 ```
-Install the audit pipeline from https://github.com/<USER>/<REPO>
+Install the audit pipeline from https://github.com/nm-app-as/nm-audit
 Ask me first whether to install globally or locally, then follow INSTALL.md exactly.
 ```
 
@@ -36,7 +36,7 @@ If you prefer to do it yourself:
 ```bash
 # macOS / Linux
 mkdir -p ~/.claude/commands
-git clone https://github.com/<USER>/<REPO>.git /tmp/claude-audit-pipeline
+git clone https://github.com/nm-app-as/nm-audit.git /tmp/claude-audit-pipeline
 cp -R /tmp/claude-audit-pipeline/audit ~/.claude/commands/audit
 rm -rf /tmp/claude-audit-pipeline
 ```
@@ -44,7 +44,7 @@ rm -rf /tmp/claude-audit-pipeline
 ```powershell
 # Windows PowerShell
 $tmp = "$env:TEMP\claude-audit-pipeline"
-git clone https://github.com/<USER>/<REPO>.git $tmp
+git clone https://github.com/nm-app-as/nm-audit.git $tmp
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.claude\commands" | Out-Null
 Copy-Item -Recurse -Force "$tmp\audit" "$env:USERPROFILE\.claude\commands\audit"
 Remove-Item -Recurse -Force $tmp
@@ -55,7 +55,7 @@ Remove-Item -Recurse -Force $tmp
 ```bash
 # macOS / Linux
 mkdir -p .claude/commands
-git clone https://github.com/<USER>/<REPO>.git /tmp/claude-audit-pipeline
+git clone https://github.com/nm-app-as/nm-audit.git /tmp/claude-audit-pipeline
 cp -R /tmp/claude-audit-pipeline/audit .claude/commands/audit
 rm -rf /tmp/claude-audit-pipeline
 ```
@@ -63,7 +63,7 @@ rm -rf /tmp/claude-audit-pipeline
 ```powershell
 # Windows PowerShell
 $tmp = "$env:TEMP\claude-audit-pipeline"
-git clone https://github.com/<USER>/<REPO>.git $tmp
+git clone https://github.com/nm-app-as/nm-audit.git $tmp
 New-Item -ItemType Directory -Force -Path ".\.claude\commands" | Out-Null
 Copy-Item -Recurse -Force "$tmp\audit" ".\.claude\commands\audit"
 Remove-Item -Recurse -Force $tmp
@@ -135,7 +135,7 @@ MIT — see [LICENSE](LICENSE).
 გახსენი **Claude Code** ნებისმიერ პროექტში და შეუბარე:
 
 ```
-დააინსტალირე აუდიტის pipeline ლინკიდან: https://github.com/<USER>/<REPO>
+დააინსტალირე აუდიტის pipeline ლინკიდან: https://github.com/nm-app-as/nm-audit
 ჯერ მკითხე გლობალურად დავაყენო თუ ლოკალურად, შემდეგ მიყევი INSTALL.md-ს ზუსტად.
 ```
 
