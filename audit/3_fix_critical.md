@@ -15,7 +15,12 @@ cat "$AUDIT_DIR/06_security/ISSUES.md" 2>/dev/null
 
 # Checkpoint
 git add .
-git commit -m "checkpoint: before fixing critical issues" --allow-empty
+git commit --allow-empty -m "$(cat <<'EOF'
+checkpoint: before fixing critical issues
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+EOF
+)"
 ```
 
 ---
@@ -37,9 +42,12 @@ git blame [affected_file] | tail -5
 ```
 დარწმუნდი პრობლემა კვლავ არსებობს — შესაძლოა ვინმემ უკვე გამოასწორა.
 
-### 2.2 — CVSS ტრიაჟი
-- CVSS 9+ (Critical): ფიქსავ დაუყოვნებლივ
-- CVSS 7-8 (High): ეს ფაზა არ ეკუთვნი — გამოტოვე
+### 2.2 — ტრიაჟი
+- 🔴 Critical: ფიქსავ დაუყოვნებლივ
+- 🟡 High ან 🟢 Medium: ეს ფაზა არ ეკუთვნი — გამოტოვე
+
+CVSS რეიტინგი მხოლოდ **Security** კატეგორიის issue-ებზე გამოიყენე (9+ = Critical, 7-8 = High).
+დანარჩენ კატეგორიებზე (Testing, Architecture, Error Handling, DB...) — 🔴/🟡/🟢 emoji-ის მიხედვით იხელმძღვანელე, რომელიც `1_audit`-მა მიანიჭა.
 
 ### 2.3 — სწორი specialized agent
 - Security პრობლემა → `api-security-audit` ან `security-reviewer`
@@ -58,17 +66,28 @@ git blame [affected_file] | tail -5
 30 წუთში ვერ წყვეტ → tracker-ში `❌ დაბლოკილია` + მიზეზი → შემდეგ critical-ზე გადადი.
 
 ### 2.6 — დასრულება
+
+ჯერ ტესტი + lint — თუ ერთერთი ვარდება, commit ბლოკდება:
+
 ```bash
-$TEST_CMD
-$LINT_CMD
+$TEST_CMD && $LINT_CMD || { echo "❌ tests/lint failed — commit ბლოკდება. გაასწორე ჯერ."; exit 1; }
+```
 
-# Tracker update
-✅ $AUDIT_DIR/00_PROGRESS_TRACKER.md → ✅ შესრულდა
-✅ $AUDIT_DIR/00_BEFORE_AFTER_METRICS.md
-✅ $AUDIT_DIR/00_DECISIONS_LOG.md
+tracker-ის განახლება (ხელით edit, არა bash):
+- `$AUDIT_DIR/00_PROGRESS_TRACKER.md` → ✅ შესრულდა
+- `$AUDIT_DIR/00_BEFORE_AFTER_METRICS.md`
+- `$AUDIT_DIR/00_DECISIONS_LOG.md`
 
+commit Co-Authored-By trailer-ით:
+
+```bash
 git add .
-git commit -m "fix: critical — [issue title]"
+git commit -m "$(cat <<'EOF'
+fix: critical — [issue title]
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+EOF
+)"
 ```
 
 ---

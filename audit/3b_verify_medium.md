@@ -70,7 +70,12 @@ diff <(grep "^[A-Z_]" .env.example 2>/dev/null | cut -d= -f1 | sort) \
 
 ## ნაბიჯი 5 — Re-Score (Code Quality, Documentation)
 
+ქულის ცვლილება მხოლოდ rubric-ის მიხედვით — წაიკითხე `/audit:0_rubric` (`~/.claude/commands/audit/0_rubric.md`).
+🟢 issue გადაჭრილი → +0.2, TypeScript `any` −50% → +0.5, lint errors → 0 → +0.5, new lint errors → −0.3/თითო.
+
 შედეგი → `$AUDIT_DIR/00_SUMMARY.md` + `$AUDIT_DIR/00_BEFORE_AFTER_METRICS.md`.
+
+`00_BEFORE_AFTER_METRICS.md`-ის score-ცხრილში **დაამატე ცალკე სვეტი** "After Medium" და "Final" — წინა სვეტები (Start, After Critical, After High) არ შეცვალო. ბოლო სვეტი "Final" საბოლოო ქულას აფიქსიოს.
 
 ---
 

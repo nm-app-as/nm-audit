@@ -45,6 +45,9 @@ $TYPECHECK_CMD
 
 ## ნაბიჯი 3 — Re-Score (Testing, Architecture, Performance)
 
+ქულის ცვლილება მხოლოდ rubric-ის მიხედვით — წაიკითხე `/audit:0_rubric` (`~/.claude/commands/audit/0_rubric.md`).
+🟡 issue გადაჭრილი → +0.5, coverage +10% → +0.5, regression → −1.5, build broken → −2.0 (instant STOP).
+
 ```bash
 # Testing
 $TEST_CMD 2>&1 | grep -E "Statements|Branches|Functions|Lines"
@@ -67,6 +70,8 @@ npx madge --circular src/ 2>/dev/null | head -10
 3. შედეგი — ფაილების სიად ჩამოწერე, ცარიელი count არა.
 
 შედეგი → `$AUDIT_DIR/00_SUMMARY.md` + `$AUDIT_DIR/00_BEFORE_AFTER_METRICS.md`.
+
+`00_BEFORE_AFTER_METRICS.md`-ის score-ცხრილში **დაამატე ცალკე სვეტი** "After High" — წინა სვეტები (Start, After Critical) არ შეცვალო.
 
 ---
 

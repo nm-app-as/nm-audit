@@ -50,8 +50,9 @@ $TYPECHECK_CMD
 
 ## ნაბიჯი 3 — Re-Score (Security, Error Handling, Database)
 
-გადასცი 0–10 scale, იგივე როგორც ორიგინალური audit-ი.
-სხვა კატეგორიების ქულები ამ ფაზაში არ შეცვალო.
+გადასცი 0–10 scale, **კონკრეტული delta წესების მიხედვით**: წაიკითხე `/audit:0_rubric`-ი (`~/.claude/commands/audit/0_rubric.md`) და გაიყენე იქ ჩამოწერილი evidence-based delta-ები (🔴 გადაჭრილი +1.0, regression −1.5, ა.შ.). სუბიექტურად ნუ აიწევ ქულას.
+
+სხვა კატეგორიების ქულები ამ ფაზაში არ შეცვალო — მათ verify_high და verify_medium აფიქსიოს.
 
 ```bash
 # Security
@@ -66,6 +67,8 @@ grep -rn "\$queryRaw\|\$executeRaw" src/ --include="*.ts"
 ```
 
 შედეგი → `$AUDIT_DIR/00_SUMMARY.md` + `$AUDIT_DIR/00_BEFORE_AFTER_METRICS.md`.
+
+`00_BEFORE_AFTER_METRICS.md`-ის score-ცხრილში **დაამატე ცალკე სვეტი** "After Critical" — წინა "Start" სვეტი არ შეცვალო. ეს history ბოლოს HTML dashboard-ში გადადის.
 
 ---
 

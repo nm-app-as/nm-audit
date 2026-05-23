@@ -17,7 +17,12 @@ cat "$AUDIT_DIR/00_REGRESSION_RISKS.md"
 
 # Checkpoint
 git add .
-git commit -m "checkpoint: before medium/refactoring fixes" --allow-empty
+git commit --allow-empty -m "$(cat <<'EOF'
+checkpoint: before medium/refactoring fixes
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+EOF
+)"
 ```
 
 ---
@@ -67,18 +72,27 @@ git commit -m "checkpoint: before medium/refactoring fixes" --allow-empty
 30 წუთში ვერ წყვეტ → `❌ გადაიდო` + მიზეზი.
 
 ### 3.4 — დასრულება
+
+ჯერ ტესტი + lint — თუ ერთერთი ვარდება, commit ბლოკდება:
+
 ```bash
-$TEST_CMD
-$LINT_CMD
+$TEST_CMD && $LINT_CMD || { echo "❌ tests/lint failed — commit ბლოკდება. გაასწორე ჯერ."; exit 1; }
+```
 
-# Tracker
-✅ $AUDIT_DIR/00_PROGRESS_TRACKER.md
-✅ $AUDIT_DIR/00_DECISIONS_LOG.md  ← refactoring decisions ADR-ად
+tracker-ის განახლება (ხელით edit):
+- `$AUDIT_DIR/00_PROGRESS_TRACKER.md`
+- `$AUDIT_DIR/00_DECISIONS_LOG.md` ← refactoring decisions ADR-ად
 
+commit Co-Authored-By trailer-ით (`refactor:` ან `docs:`):
+
+```bash
 git add .
-git commit -m "refactor: [issue title]"
-# ან
-git commit -m "docs: [issue title]"
+git commit -m "$(cat <<'EOF'
+refactor: [issue title]
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+EOF
+)"
 ```
 
 ---

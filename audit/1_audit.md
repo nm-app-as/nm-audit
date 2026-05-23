@@ -10,7 +10,7 @@
 ```bash
 if [ ! -f audit/.config.json ]; then
   echo "❌ audit/.config.json არ არის."
-  echo "ჯერ გაუშვი: /audit:init"
+  echo "ჯერ გაუშვი: /audit:0_init"
   exit 1
 fi
 
@@ -19,8 +19,11 @@ TEST_CMD=$(jq -r '.commands.test_coverage // .commands.test // "npm test"' audit
 LINT_CMD=$(jq -r '.commands.lint // "npm run lint"' audit/.config.json)
 TYPECHECK_CMD=$(jq -r '.commands.typecheck // "npx tsc --noEmit"' audit/.config.json)
 PLATFORM=$(jq -r '.deploy_platform // "unknown"' audit/.config.json)
-echo "Stack ready: test='$TEST_CMD', lint='$LINT_CMD', platform=$PLATFORM"
+GITNEXUS=$(jq -r '.gitnexus_indexed // false' audit/.config.json)
+echo "Stack ready: test='$TEST_CMD', lint='$LINT_CMD', platform=$PLATFORM, gitnexus=$GITNEXUS"
 ```
+
+თუ `GITNEXUS=true` — Architecture, Security, Error Handling ფაზებში გამოიყენე `gitnexus_*` MCP tools (impact / query / cypher) grep-ის და madge-ის ნაცვლად. ეს უფრო სანდო შედეგს იძლევა (false-positive-ი ნაკლები) და უკვე ინდექსირებული dep graph-ი გვაქვს.
 
 ### 0.2 — Git safety + ერთი branch ციკლზე
 
@@ -69,6 +72,11 @@ echo "$AUDIT_DATE" > audit/LATEST
 - Auth middleware ყოველ protected route-ზე
 - Security headers (helmet ან მსგავსი)
 
+თუ GitNexus indexed:
+- `gitnexus_query({query: "auth middleware authentication"})` — auth flow-ების სრული რუკისთვის
+- `gitnexus_query({query: "input validation user input"})` — boundary-ების სიისთვის
+- `gitnexus_context({name: "<endpoint handler>"})` — ყოველი endpoint-ის სრული callers/callees
+
 ### 📦 Code Quality — 15%
 **Agent:** `code-reviewer`
 - Readability, DRY/SOLID/KISS
@@ -90,12 +98,21 @@ echo "$AUDIT_DATE" > audit/LATEST
 - Circular deps: `npx madge --circular src/`
 - 10x scale-ზე რა გატყდება?
 
+თუ GitNexus indexed (აჯობებს grep + madge-ს):
+- `gitnexus_cypher({query: "MATCH (n)<-[r:CALLS|IMPORTS]-(m) RETURN n.name, count(m) AS deps ORDER BY deps DESC LIMIT 10"})` — ყველაზე "load-bearing" symbols
+- `gitnexus_query({query: "module coupling cross-cutting"})` — cohesion gap-ები
+- Circular deps GitNexus-ის graph-დან — უფრო ზუსტი vs madge
+
 ### ⚠️ Error Handling — 10%
 **Agents:** `debugger`, `code-reviewer`
 - Unhandled promise rejections
 - ცარიელი catch blocks: `grep -rn "catch.*{}" src --include="*.ts"`
 - Production stack traces?
 - DB/external API down — graceful degradation?
+
+თუ GitNexus indexed:
+- `gitnexus_query({query: "error handling exception catch"})` — ყველა error path
+- `gitnexus_context({name: "errorHandler"})` ან მსგავსი — error middleware-ის callers
 
 ### 🖥 Frontend — 10%
 **Agent:** `frontend-developer` (თუ frontend არსებობს)
@@ -149,6 +166,8 @@ overall = (security×0.20) + (code_quality×0.15) + (testing×0.15)
 
 თუ Frontend არ არსებობს: 10% გადანაწილდეს Security +5% და Testing +5%-ზე
 (ფორმულა: security 25%, testing 20%, frontend 0%, დანარჩენი იგივე).
+
+ქულის მინიჭების კონკრეტული რუბრიკა → `/audit:0_rubric` (0-2 = კატასტროფული, 9-10 = წარჩინებული).
 
 ### Output ფორმატი
 

@@ -14,7 +14,12 @@ cat "$AUDIT_DIR/00_PROGRESS_TRACKER.md"
 
 # Checkpoint
 git add .
-git commit -m "checkpoint: before fixing high severity issues" --allow-empty
+git commit --allow-empty -m "$(cat <<'EOF'
+checkpoint: before fixing high severity issues
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+EOF
+)"
 ```
 
 ---
@@ -55,20 +60,30 @@ git diff --name-only HEAD
 30 წუთში ვერ წყვეტ → tracker-ში `❌ დაბლოკილია` + მიზეზი → შემდეგზე გადადი.
 
 ### 2.5 — დასრულება
+
+High severity: commit-ამდე ფაილების სია + test/lint blocking:
+
 ```bash
-# High severity: commit-ამდე ფაილების სია
 echo "Files changed: $(git diff --name-only HEAD | tr '\n' ', ')"
 
-$TEST_CMD
-$LINT_CMD
+$TEST_CMD && $LINT_CMD || { echo "❌ tests/lint failed — commit ბლოკდება. გაასწორე ჯერ."; exit 1; }
+```
 
-# Tracker
-✅ $AUDIT_DIR/00_PROGRESS_TRACKER.md
-✅ $AUDIT_DIR/00_BEFORE_AFTER_METRICS.md
-✅ $AUDIT_DIR/00_DECISIONS_LOG.md
+tracker-ის განახლება (ხელით edit):
+- `$AUDIT_DIR/00_PROGRESS_TRACKER.md`
+- `$AUDIT_DIR/00_BEFORE_AFTER_METRICS.md`
+- `$AUDIT_DIR/00_DECISIONS_LOG.md`
 
+commit Co-Authored-By trailer-ით:
+
+```bash
 git add .
-git commit -m "fix: high — [issue title]"
+git commit -m "$(cat <<'EOF'
+fix: high — [issue title]
+
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+EOF
+)"
 ```
 
 ---

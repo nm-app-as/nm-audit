@@ -122,14 +122,19 @@ Browser-ში double-click-ით უნდა იხსნებოდეს. 
 
 ## CHANGELOG განახლება
 
-```bash
-# საბოლოო verdict + overall — დააფიქსირე CHANGELOG-ში
-# (1_audit-მა დაწერა "(in progress)" ხაზი — ჩაანაცვლე საბოლოო-ით)
-AUDIT_DATE=$(cat audit/LATEST)
-sed -i.bak "s|^| $AUDIT_DATE | X.X | (in progress) ||| $AUDIT_DATE | [final-overall] | [VERDICT] |" audit/CHANGELOG.md
+`audit/CHANGELOG.md`-ის ბოლო ხაზი ჯერ ისევ ასე ჩანს (`1_audit`-მა დაწერა):
+
+```
+| 2026-05-15 | X.X | (in progress) |
 ```
 
-(ან ხელით განაახლე ბოლო ხაზი final overall + verdict-ით.)
+ჩაანაცვლე ხელით (Edit tool-ით) საბოლოო ქულითა და verdict-ით:
+
+```
+| 2026-05-15 | [final-overall] | ✅ GO  (ან ⚠️ CONDITIONAL GO / ❌ NO-GO) |
+```
+
+sed/awk-ით ავტომატური ჩანაცვლება არ ვცადო — `|` ცხრილის დელიმიტერი ერევა sed-ის დელიმიტერში და commands ერთგვაროვნად ვერ მუშაობს Windows/Linux-ზე.
 
 ---
 
@@ -148,7 +153,7 @@ Verdict: [✅ GO / ⚠️ CONDITIONAL GO / ❌ NO-GO]
 
   (a) ცალკე გადახედე ფიქსები და ხელით merge-ე
   (b) გავაკეთო GitHub PR ახლავე (`gh pr create`)
-  (c) abort — main-ს ვუბრუნდე, branch რჩება ხელუხლებელი (`/audit:abort`)
+  (c) abort — main-ს ვუბრუნდე, branch რჩება ხელუხლებელი (`/audit:0_abort`)
 
 რომელი?
 ```

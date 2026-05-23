@@ -14,7 +14,7 @@ LINT_CMD=$(jq -r '.commands.lint // "npm run lint"' audit/.config.json 2>/dev/nu
 ```
 
 **შენიშვნა:** quick_check-მა შესაძლოა იმუშაოს active audit-ის გარეშე. იდეალურად
-ჯერ `/audit:init` და `/audit:1_audit` იმუშავოს, რომ summary-ი შენახული ფაილი არსებობდეს.
+ჯერ `/audit:0_init` და `/audit:1_audit` იმუშავოს, რომ summary-ი შენახული ფაილი არსებობდეს.
 
 ---
 

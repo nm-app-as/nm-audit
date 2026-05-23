@@ -57,6 +57,15 @@ fi
 - `vite.config.*` → `vite`
 - `package.json` deps-ის მიხედვით: `react`, `vue`, `svelte`, `express`, `fastify`, `tailwind`
 
+### 1.6 — GitNexus indexing
+- `.gitnexus/meta.json` არსებობს? → `gitnexus_indexed: true`, წაიკითხე `stats.symbols` და `stats.embeddings`
+- არ არსებობს? → `gitnexus_indexed: false`
+
+ეს ცვლის audit pipeline-ის ქცევას: GitNexus-ის არსებობისას Architecture / Security / Error Handling ფაზებში გამოვიყენებთ `gitnexus_impact` / `gitnexus_query` / `gitnexus_cypher` ბრძანებებს grep-ის და madge-ის ნაცვლად.
+
+### 1.7 — Per-workspace commands (monorepo-ისთვის)
+თუ 1.2-ში monorepo აღმოაჩინე — თითოეული workspace-ისთვის ცალკე scripts წაიკითხე (`backend/package.json`, `frontend/package.json`...) და შეინახე `workspace_commands` ბლოკში.
+
 ---
 
 ## ნაბიჯი 2 — ჩაწერე `audit/.config.json`
@@ -80,16 +89,51 @@ mkdir -p audit
     "build": "npm run build",
     "typecheck": "npx tsc --noEmit"
   },
+  "workspace_commands": {
+    "backend": {
+      "test": "npm run test --workspace=backend",
+      "lint": "npm run lint --workspace=backend",
+      "typecheck": "cd backend && npx tsc --noEmit"
+    },
+    "frontend": {
+      "test": "npm run test --workspace=frontend",
+      "lint": "npm run lint --workspace=frontend",
+      "typecheck": "cd frontend && npx tsc --noEmit"
+    }
+  },
   "deploy_platform": "Railway",
-  "stack": ["typescript", "express", "prisma", "react", "vite"]
+  "stack": ["typescript", "express", "prisma", "react", "vite"],
+  "gitnexus_indexed": true,
+  "gitnexus_symbols": 4203,
+  "gitnexus_embeddings": 0
 }
 ```
+
+`workspace_commands` მხოლოდ monorepo-ის შემთხვევაში. თუ root-level scripts მუშაობს ერთიანად, workspace-კონკრეტული fallback-ად რჩება (verify ფაზებში გამოვიყენებთ თუ root command-მა ვერ მოიცვა workspace).
+
+`gitnexus_*` ველები მხოლოდ თუ `.gitnexus/meta.json` არსებობს. ეს ცვლის Architecture, Security, Error Handling ფაზების მიდგომას — grep-ის ნაცვლად `gitnexus_*` MCP tools.
 
 რა ბრძანება ვერ აღმოაჩინე — ჩაწერე `null`. აუდიტის ფაზები ცარიელ ბრძანებებს გადატივიან და user-ს შეახსენებენ.
 
 ---
 
-## ნაბიჯი 3 — შეატყობინე user-ს
+## ნაბიჯი 3 — ბრძანებების verification (dry-run)
+
+ნუ ენდე package.json-ის script-ებს ბრმად — შეიძლება broken იყოს. შეამოწმე:
+
+```bash
+# შეამოწმე test command არის თუ არა
+[ "$TEST_CMD" != "null" ] && npm run test --silent --if-present > /dev/null 2>&1 && echo "✅ test ok" || echo "⚠️ test ვერ ეშვება"
+
+# იგივე lint-ისთვის
+[ "$LINT_CMD" != "null" ] && npm run lint --silent --if-present > /dev/null 2>&1 && echo "✅ lint ok" || echo "⚠️ lint ვერ ეშვება"
+```
+
+თუ ბრძანება ვერ ეშვება — `audit/.config.json`-ში ნულად დატოვე და user-ს გააფრთხილე.
+
+---
+
+## ნაბიჯი 4 — შეატყობინე user-ს
 
 ```
 ✅ audit/.config.json შექმნილია.
@@ -102,6 +146,7 @@ mkdir -p audit
 - Typecheck: [command ან NONE]
 - Deploy: [Railway/Vercel/...]
 - Stack: [typescript, prisma, react, ...]
+- GitNexus: [✅ indexed (X symbols) / ❌ not indexed]
 
 ახლა შეგიძლია გაუშვა: /audit:1_audit
 ```

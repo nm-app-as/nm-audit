@@ -35,6 +35,11 @@ git branch --show-current
 - **Coupling score per module**: cross-module imports count
 - **Tribal knowledge**: undocumented assumption-ები, რომლებიც პროექტს ამუშავებენ
 
+თუ GitNexus indexed (`.gitnexus/meta.json` არსებობს):
+- `gitnexus_cypher({query: "MATCH (n)<-[:CALLS|IMPORTS]-(m) RETURN n.name AS symbol, count(m) AS inbound ORDER BY inbound DESC LIMIT 20"})` — load-bearing symbols
+- `gitnexus_impact({target: "<top symbol>", direction: "upstream"})` — blast radius მაგარი evolution candidates-ისთვის
+- `gitnexus_query({query: "scalability bottleneck"})` — concept-search execution flows-ისთვის
+
 ---
 
 ## EVOLUTION PLAN
@@ -79,7 +84,7 @@ git branch --show-current
 - CI pipeline duration: target < 10 წუთი
 - Undocumented steps (README რას არ ფარავს)
 
-გაასწორე pose README-ში პირდაპირ.
+გაასწორე ეს README-ში პირდაპირ.
 
 ---
 
