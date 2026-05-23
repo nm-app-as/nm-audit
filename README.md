@@ -23,7 +23,7 @@ The agent will:
 3. Download the `audit/` folder into the right place
 4. Verify the install and tell you how to start
 
-After install, run `/audit:0_how_to_use` for the full pipeline guide, or `/audit:init` to detect your stack.
+After install, run `/audit:0_how_to_use` for the full pipeline guide, or `/audit:0_init` to detect your stack.
 
 ---
 
@@ -75,8 +75,12 @@ Remove-Item -Recurse -Force $tmp
 
 | File | Purpose |
 |------|---------|
-| `audit/init.md` | One-time stack detection → writes `audit/.config.json` |
 | `audit/0_how_to_use.md` | Full pipeline guide (read this first) |
+| `audit/0_init.md` | One-time stack detection → writes `audit/.config.json` |
+| `audit/0_rubric.md` | Shared scoring rules used by `1_audit` and `3b_verify_*` for consistent severity ratings |
+| `audit/0_status.md` | Per-project audit status reference — which phase is active, what's pending, what to run next |
+| `audit/0_quick_check.md` | One-category quick audit (no full pipeline) |
+| `audit/0_abort.md` | Safe rollback to main, preserves audit branch + output |
 | `audit/1_audit.md` | Full audit scan, creates `audit/YYYY-MM-DD/` |
 | `audit/2_after_audit.md` | Restructure findings into per-category files |
 | `audit/3_fix_critical.md` | Fix 🔴 Critical issues (CVSS 9+) |
@@ -89,8 +93,6 @@ Remove-Item -Recurse -Force $tmp
 | `audit/5_attack.md` | Red team / blue team adversarial audit |
 | `audit/6_architecture_evolution.md` | Architecture evolution plan |
 | `audit/7_final.md` | Investment verdict + HTML dashboard |
-| `audit/quick_check.md` | One-category quick audit (no full pipeline) |
-| `audit/abort.md` | Safe rollback to main, preserves audit branch + output |
 
 ---
 
@@ -99,10 +101,10 @@ Remove-Item -Recurse -Force $tmp
 Inside Claude Code, after install:
 
 ```
-/audit:init                  # First time only — detects stack
-/audit:0_how_to_use          # Read the pipeline guide
-/audit:1_audit               # Start a full audit
-/audit:quick_check security  # Or run a quick single-category check
+/audit:0_init                  # First time only — detects stack
+/audit:0_how_to_use            # Read the pipeline guide
+/audit:1_audit                 # Start a full audit
+/audit:0_quick_check security  # Or run a quick single-category check
 ```
 
 Each phase reads its predecessor's output. One audit cycle = one branch (`audit/YYYY-MM-DD`). `main` stays untouched until you merge.
@@ -147,15 +149,15 @@ MIT — see [LICENSE](LICENSE).
 3. გადმოწერს `audit/` ფოლდერს და დააყენებს სწორ ადგილას
 4. შეამოწმებს და გეტყვის როგორ დაიწყო
 
-დაყენების შემდეგ გაუშვი `/audit:0_how_to_use` გზამკვლევისთვის, ან `/audit:init` რომ stack იყოს გამოვლენილი.
+დაყენების შემდეგ გაუშვი `/audit:0_how_to_use` გზამკვლევისთვის, ან `/audit:0_init` რომ stack იყოს გამოვლენილი.
 
 ### გამოყენება
 
 ```
-/audit:init                  # ერთხელ — გამოავლენს stack-ს
-/audit:0_how_to_use          # სრული გზამკვლევი
-/audit:1_audit               # სრული აუდიტის დაწყება
-/audit:quick_check security  # ერთი კატეგორიის სწრაფი შემოწმება
+/audit:0_init                  # ერთხელ — გამოავლენს stack-ს
+/audit:0_how_to_use            # სრული გზამკვლევი
+/audit:1_audit                 # სრული აუდიტის დაწყება
+/audit:0_quick_check security  # ერთი კატეგორიის სწრაფი შემოწმება
 ```
 
 დეტალური ლოგიკა და ფოლდერის სტრუქტურა — `audit/0_how_to_use.md`-ში.

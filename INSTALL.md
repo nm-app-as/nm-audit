@@ -89,9 +89,9 @@ Get-ChildItem "<TARGET>"   # Windows PowerShell
 
 You should see at least these files:
 - `0_how_to_use.md`
+- `0_init.md`
+- `0_quick_check.md`
 - `1_audit.md`
-- `init.md`
-- `quick_check.md`
 - and the rest of the `*.md` phase files
 
 If the listing is empty or missing files, the install failed — surface the error to the user, do **not** silently move on.
@@ -106,7 +106,7 @@ Tell the user, in their language:
 >
 > Next steps:
 > 1. Restart Claude Code (or run `/help` to refresh slash commands) so it picks up the new `/audit:*` commands.
-> 2. Run `/audit:init` once to detect your project's stack.
+> 2. Run `/audit:0_init` once to detect your project's stack.
 > 3. Run `/audit:0_how_to_use` to read the full pipeline guide.
 
 ---
